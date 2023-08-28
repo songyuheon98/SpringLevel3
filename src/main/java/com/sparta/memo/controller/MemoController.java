@@ -54,9 +54,9 @@ public class MemoController {
     }
 
     @GetMapping("/memos")
-    public List<MemoResponseDto> getMemos() { // 일단 get도 잘된다.
+    public List<MemoResponseDto> getMemos() { // 2번 요청 완성
         // DB 조회
-        String sql = "SELECT title, username, contents, updateAt FROM gallery ORDER BY updateAt DESC";
+        String sql = "SELECT title, username, contents, updateAt FROM gallery ORDER BY updateAt DESC";//order by로 내림차순
 
         return jdbcTemplate.query(sql, new RowMapper<MemoResponseDto>() {
             @Override
@@ -72,12 +72,12 @@ public class MemoController {
     }
 
     @GetMapping("/memos/{id}")
-    public MemoResponseDto getOneMemo(@PathVariable Long id) {
+    public MemoResponseDto getOneMemo(@PathVariable Long id) { // 4번 요청 완성
         // DB 조회
         Memo memo = findById(id);
 
         if (memo != null) {
-            String sql = "SELECT title, username, updateAt, contents FROM gallery WHERE id = ?";
+            String sql = "SELECT title, username, updateAt, contents FROM gallery WHERE id = ?";// 해당 아이디 값으로 된 게시물 조회
             return jdbcTemplate.queryForObject(sql, new RowMapper<MemoResponseDto>() {
                 @Override
                 public MemoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -95,11 +95,11 @@ public class MemoController {
     }
 
     @PutMapping("/memos/{id}")
-    public MemoResponseDto updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) { // 비번검사, 변경 성공, 시간도 성공
+    public MemoResponseDto updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) { // 5번 요청
         // 해당 메모가 DB에 존재하는지 확인
         Memo memo = findById(id);
         String getPasswordQuery = "SELECT user_pw FROM gallery WHERE id = ?";
-        String actualPassword = jdbcTemplate.queryForObject(getPasswordQuery, String.class, id);
+        String actualPassword = jdbcTemplate.queryForObject(getPasswordQuery, String.class, id); // 비밀번호 저장
 
         if(memo != null && actualPassword.equals(requestDto.getUser_pw())) {
             // memo 내용 수정
@@ -109,17 +109,17 @@ public class MemoController {
             Memo updatedMemo = findById(id);
 
             // Entity -> ResponseDto
-            return new MemoResponseDto(updatedMemo);
+            return new MemoResponseDto(updatedMemo); // 게시글을 반환
         } else {
             throw new IllegalArgumentException("선택한 메모는 존재하지 않습니다.");
         }
     }
 
     @DeleteMapping("/memos/{id}")
-    public String deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) { // 성공
+    public String deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) { // 6번 요청
         // 해당 메모가 DB에 존재하는지 확인
         Memo memo = findById(id);
-        String getPasswordQuery = "SELECT user_pw FROM gallery WHERE id = ?";
+        String getPasswordQuery = "SELECT user_pw FROM gallery WHERE id = ?"; // 5번과 동일한 과정
         String actualPassword = jdbcTemplate.queryForObject(getPasswordQuery, String.class, id);
         if(memo != null && actualPassword.equals(requestDto.getUser_pw())) {
             // memo 삭제
