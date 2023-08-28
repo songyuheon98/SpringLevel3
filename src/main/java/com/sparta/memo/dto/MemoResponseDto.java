@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 
 @Getter
 public class MemoResponseDto { // 응답하는 Dto
+    // @JsonIgnore는 id, pw 노출을 피하기 위함
     @JsonIgnore
     private Long id;
     @JsonIgnore
