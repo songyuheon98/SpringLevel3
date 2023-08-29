@@ -2,6 +2,7 @@ package com.sparta.memo.controller;
 
 import com.sparta.memo.dto.MemoRequestDto;
 import com.sparta.memo.dto.MemoResponseDto;
+import com.sparta.memo.entity.Memo;
 import com.sparta.memo.service.MemoService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,18 @@ public class MemoController {
         return memoService.getMemos();
     }
 
+    @GetMapping("/memos/{id}")
+    public MemoResponseDto getOneMemo(@PathVariable Long id) {
+        return memoService.getOneMemo(id);
+    }
+
     @GetMapping("/memos/contents")
     public List<MemoResponseDto> getMemosByKeyword(String keyword) {
         return memoService.getMemosByKeyword(keyword);
     }
 
     @PutMapping("/memos/{id}")
-    public Long updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
+    public Memo updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         String password = requestDto.getPassword();
         return memoService.updateMemo(id, requestDto, password);
     }

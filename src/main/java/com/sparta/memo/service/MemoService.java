@@ -33,8 +33,16 @@ public class MemoService {
 
     public List<MemoResponseDto> getMemos() {
         // DB 조회
-        return memoRepository.findAllByOrderByModifiedAtDesc().stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
+        return memoRepository.findAllByOrderByCreatedAtDesc().stream().map(MemoResponseDto::fromMemo).toList();// 메모를 리스트 타입으로 반환
     }
+
+    public MemoResponseDto getOneMemo(Long id) {
+        // DB 조회
+        Memo memo = memoRepository.findMemoById(id);
+
+        return MemoResponseDto.fromMemo(memo);
+    }
+
 
     public List<MemoResponseDto> getMemosByKeyword(String keyword) {
         // DB 조회
@@ -42,11 +50,12 @@ public class MemoService {
     }
 
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
-    public Long updateMemo(Long id, MemoRequestDto requestDto, String password) {
+    public Memo updateMemo(Long id, MemoRequestDto requestDto, String password) {
+        Memo memo = isPasswordValid(id, password);
 
-        isPasswordValid(id, password).update(requestDto); // update는 memo 클래스에서 만든 것
+        memo.update(requestDto); // update는 memo 클래스에서 만든 것
 
-        return id;
+        return memo;
     }
 
     public Long deleteMemo(Long id, String password) {
