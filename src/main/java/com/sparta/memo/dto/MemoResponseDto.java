@@ -1,6 +1,4 @@
 package com.sparta.memo.dto;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.memo.entity.Memo;
 import lombok.Getter;
 
