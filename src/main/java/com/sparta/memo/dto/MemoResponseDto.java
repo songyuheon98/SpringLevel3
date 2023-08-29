@@ -12,6 +12,7 @@ public class MemoResponseDto { // 응답하는 Dto
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private String password;
 
 
     public MemoResponseDto(Memo memo) {
@@ -20,6 +21,7 @@ public class MemoResponseDto { // 응답하는 Dto
         this.contents = memo.getContents();
         this.createdAt = memo.getCreatedAt();
         this.modifiedAt = memo.getModifiedAt();
+        this.password = memo.getPassword();
     }
 
 }

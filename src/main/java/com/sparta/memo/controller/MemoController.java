@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -35,11 +36,13 @@ public class MemoController {
 
     @PutMapping("/memos/{id}")
     public Long updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.updateMemo(id, requestDto);
+        String password = requestDto.getPassword();
+        return memoService.updateMemo(id, requestDto, password);
     }
 
     @DeleteMapping("/memos/{id}")
-    public Long deleteMemo(@PathVariable Long id) {
-        return memoService.deleteMemo(id);
+    public Long deleteMemo(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        String password = requestBody.get("password");
+        return memoService.deleteMemo(id, password);
     }
 }

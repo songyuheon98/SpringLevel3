@@ -42,20 +42,16 @@ public class MemoService {
     }
 
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
-    public Long updateMemo(Long id, MemoRequestDto requestDto) {
-        // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findMemo(id);
+    public Long updateMemo(Long id, MemoRequestDto requestDto, String password) {
 
-        memo.update(requestDto); // update는 memo 클래스에서 만든 것
+        isPasswordValid(id, password).update(requestDto); // update는 memo 클래스에서 만든 것
 
         return id;
     }
 
-    public Long deleteMemo(Long id) {
-        // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findMemo(id);
+    public Long deleteMemo(Long id, String password) {
 
-        memoRepository.delete(memo);
+        memoRepository.delete(isPasswordValid(id, password));
 
         return id;
     }
@@ -65,4 +61,16 @@ public class MemoService {
                 new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
         );
     }
+
+    private Memo isPasswordValid(Long id, String providedPassword) {
+        Memo memo = findMemo(id);
+
+        if (!memo.getPassword().equals(providedPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return memo;
+    }
+
+
 }

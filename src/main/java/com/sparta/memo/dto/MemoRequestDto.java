@@ -8,5 +8,6 @@ import lombok.Getter;
 public class MemoRequestDto { // 정보 주는 Dto
     private String username;
     private String contents;
+    private String password;
 
 }
