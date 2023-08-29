@@ -36,6 +36,11 @@ public class MemoService {
         return memoRepository.findAllByOrderByModifiedAtDesc().stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
     }
 
+    public List<MemoResponseDto> getMemosByKeyword(String keyword) {
+        // DB 조회
+        return memoRepository.findAllByContentsContainsOrderByModifiedAtDesc(keyword).stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
+    }
+
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
     public Long updateMemo(Long id, MemoRequestDto requestDto) {
         // 해당 메모가 DB에 존재하는지 확인
