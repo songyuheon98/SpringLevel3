@@ -33,7 +33,7 @@ public class MemoService {
 
     public List<MemoResponseDto> getMemos() {
         // DB 조회
-        return memoRepository.findAll().stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
+        return memoRepository.findAllByOrderByModifiedAtDesc().stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
     }
 
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
