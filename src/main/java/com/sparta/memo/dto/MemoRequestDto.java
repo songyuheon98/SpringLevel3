@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 
 @Getter
 public class MemoRequestDto { // 정보 주는 Dto
-    private Long id;
     private String username;
     private String contents;
 
