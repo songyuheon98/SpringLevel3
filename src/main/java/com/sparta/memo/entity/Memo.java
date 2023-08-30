@@ -17,7 +17,7 @@ public class Memo extends Timestamped{
     private Long id;
     @Column(name = "username", nullable = false)
     private String username;
-    @Column(name = "username", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
