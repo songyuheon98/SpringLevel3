@@ -17,6 +17,8 @@ public class Memo extends Timestamped{
     private Long id;
     @Column(name = "username", nullable = false)
     private String username;
+    @Column(name = "username", nullable = false)
+    private String title;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
     @Column(name = "password", nullable = false)
@@ -24,12 +26,14 @@ public class Memo extends Timestamped{
 
     public Memo(MemoRequestDto requestDto) {
         this.username = requestDto.getUsername();
+        this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
     }
 
     public void update(MemoRequestDto requestDto) {
         this.username = requestDto.getUsername();
+        this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 }

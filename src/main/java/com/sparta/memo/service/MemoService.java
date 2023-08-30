@@ -43,12 +43,6 @@ public class MemoService {
         return MemoResponseDto.fromMemo(memo);
     }
 
-
-    public List<MemoResponseDto> getMemosByKeyword(String keyword) {
-        // DB 조회
-        return memoRepository.findAllByContentsContainsOrderByModifiedAtDesc(keyword).stream().map(MemoResponseDto::new).toList();// 메모를 리스트 타입으로 반환
-    }
-
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
     public Memo updateMemo(Long id, MemoRequestDto requestDto, String password) {
         Memo memo = isPasswordValid(id, password);

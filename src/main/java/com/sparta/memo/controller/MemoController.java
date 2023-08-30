@@ -35,11 +35,6 @@ public class MemoController {
         return memoService.getOneMemo(id);
     }
 
-    @GetMapping("/memos/contents")
-    public List<MemoResponseDto> getMemosByKeyword(String keyword) {
-        return memoService.getMemosByKeyword(keyword);
-    }
-
     @PutMapping("/memos/{id}")
     public Memo updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         String password = requestDto.getPassword();
