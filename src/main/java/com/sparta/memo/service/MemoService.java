@@ -14,9 +14,13 @@ public class MemoService {
 
     private final MemoRepository memoRepository; // final은 무조건 생성자로 주입
 
+
+
     public MemoService(MemoRepository memoRepository) {
         this.memoRepository = memoRepository;
     }
+
+
 
     public MemoResponseDto createMemo(MemoRequestDto requestDto) {
         // RequestDto -> Entity
