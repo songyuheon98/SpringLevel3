@@ -3,9 +3,12 @@ package com.sparta.memo.service;
 import com.sparta.memo.dto.MemoRequestDto;
 import com.sparta.memo.dto.MemoResponseDto;
 import com.sparta.memo.entity.Memo;
+import com.sparta.memo.entity.UserRoleEnum;
 import com.sparta.memo.repository.MemoRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -19,16 +22,13 @@ public class MemoService {
 
 
 
-    public MemoResponseDto createMemo(MemoRequestDto requestDto) {
+    public MemoResponseDto createMemo(MemoRequestDto requestDto, String username) {
         // RequestDto -> Entity
-        Memo memo = new Memo(requestDto);
-
+        Memo memo = new Memo(requestDto, username);
         // DB 저장
         Memo saveMemo = memoRepository.save(memo);
-
         // Entity -> ResponseDto
         MemoResponseDto memoResponseDto = new MemoResponseDto(saveMemo);
-
         return memoResponseDto;
     }
 
@@ -45,19 +45,24 @@ public class MemoService {
     }
 
     @Transactional // updateMemo는 따로 Transactional 되어있지 않아 해줘야함
-    public Memo updateMemo(Long id, MemoRequestDto requestDto, String password) {
-        Memo memo = isPasswordValid(id, password);
-
-        memo.update(requestDto); // update는 memo 클래스에서 만든 것
+    public Memo updateMemo(Long id, MemoRequestDto requestDto, String username, UserRoleEnum role) {
+        Memo memo = findMemo(id);
+        if(role.getAuthority().equals("ROLE_ADMIN")|| memo.getUsername().equals(username) )
+            memo.update(requestDto, memo.getUsername()); // update는 memo 클래스에서 만든 것
+        else
+            throw new IllegalArgumentException("당신에겐 글을 수정할 권한이 없습니다 >.< !!");
 
         return memo;
     }
 
-    public Long deleteMemo(Long id, String password) {
+    public ResponseEntity<String>  deleteMemo(Long id, String username, UserRoleEnum role) {
+        Memo memo = findMemo(id);
+        if(role.getAuthority().equals("ROLE_ADMIN")|| memo.getUsername().equals(username))
+            memoRepository.delete(memo);
+        else
+            return ResponseEntity.ok("{\"msg\": \"삭제 실패\", \"statusCode\": 444}");
+        return ResponseEntity.ok("{\"msg\": \"삭제 성공\", \"statusCode\": 200}");
 
-        memoRepository.delete(isPasswordValid(id, password));
-
-        return id;
     }
 
     private Memo findMemo(Long id) { // 메모 찾기
@@ -66,14 +71,6 @@ public class MemoService {
         );
     }
 
-    private Memo isPasswordValid(Long id, String providedPassword) {
-        Memo memo = findMemo(id);
 
-        if (!memo.getPassword().equals(providedPassword)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return memo;
-    }
 
 }

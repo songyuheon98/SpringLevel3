@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity // JPA가 관리할 수 있는 Entity 클래스 지정
 @Getter
 @Setter
@@ -21,19 +24,20 @@ public class Memo extends Timestamped{
     private String title;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
-    @Column(name = "password", nullable = false)
-    private String password;
 
-    public Memo(MemoRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.title = requestDto.getTitle();
-        this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
-    }
-
-    public void update(MemoRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+    public Memo(MemoRequestDto requestDto, String tokenUsername) {
+        this.username = tokenUsername;
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
+
+
+    public void update(MemoRequestDto requestDto, String username) {
+        this.username = username;
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+    }
+
+    @OneToMany(mappedBy = "memo", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 }

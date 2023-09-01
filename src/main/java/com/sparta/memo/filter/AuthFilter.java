@@ -73,14 +73,3 @@ public class AuthFilter implements Filter {
         }
     }
 }
-
-/*
-* @GetMapping("/products")
-    public String getProducts(HttpServletRequest req) {
-        System.out.println("ProductController.getProducts : 인증 완료");
-        User user = (User) req.getAttribute("user");
-        System.out.println("user.getUsername() = " + user.getUsername());
-
-        return "redirect:/";
-    }
-* */

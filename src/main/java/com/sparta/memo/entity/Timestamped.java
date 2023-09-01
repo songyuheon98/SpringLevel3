@@ -22,4 +22,6 @@ public abstract class Timestamped { // 다른 클래스에 상속하기 위한 �
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifiedAt;
+
+
 }
